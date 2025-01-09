@@ -9,13 +9,20 @@ import { NgxEditorServiceConfig } from './editor-config.service';
 })
 export class NgxEditorService {
   config: NgxEditorServiceConfig;
+  // eslint disable next line no-underscore-dangle
+  _locals: any;
 
   constructor(@Optional() config?: NgxEditorServiceConfig) {
     this.config = config;
+    this._locals = new Locals(this.config.locals);
   }
 
   get locals(): Locals {
-    return new Locals(this.config.locals);
+    return this._locals;
+  }
+
+  set locals(locals: any) {
+    this._locals = new Locals(locals);
   }
 }
 

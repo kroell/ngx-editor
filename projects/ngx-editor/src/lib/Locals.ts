@@ -47,6 +47,10 @@ class Locals {
   get = (key: string):string => {
     return this.locals[key] ?? '';
   };
+
+  set = (key: string, value: string) => {
+    this.locals[key] = value;
+  };
 }
 
 export default Locals;
