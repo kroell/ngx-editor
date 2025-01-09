@@ -6,7 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { isNil } from 'ngx-editor/utils';
 
 import EditorCommands from './EditorCommands';
-import defautlSchema from './schema';
+import defaultSchema from './schema';
 import { parseContent } from './parsers';
 import getDefaultPlugins from './defaultPlugins';
 
@@ -24,6 +24,7 @@ interface Options {
   attributes?: EditorProps['attributes'];
   features?: EditorFeatures;
   handleScrollToSelection?: EditorProps['handleScrollToSelection'];
+  linkValidationPattern?: string;
 }
 
 interface EditorFeatures {
@@ -41,12 +42,13 @@ const DEFAULT_OPTIONS: Options = {
   history: true,
   keyboardShortcuts: true,
   inputRules: true,
-  schema: defautlSchema,
+  schema: defaultSchema,
   plugins: [],
   nodeViews: {},
   attributes: {},
   features: defaultFeatures,
   handleScrollToSelection: null,
+  linkValidationPattern: '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/??([^#\n\r]*)?#?([^\n\r]*)|(mailto:.*[@].*)',
 };
 
 class Editor {
@@ -70,7 +72,11 @@ class Editor {
   }
 
   get schema(): Schema {
-    return this.options.schema || defautlSchema;
+    return this.options.schema || defaultSchema;
+  }
+
+  get linkValidationPattern(): string {
+    return this.options.linkValidationPattern;
   }
 
   get commands(): EditorCommands {

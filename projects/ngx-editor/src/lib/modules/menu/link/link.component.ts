@@ -21,18 +21,10 @@ export class LinkComponent implements OnInit, OnDestroy {
   showPopup = false;
   isActive = false;
   canExecute = true;
+  form: FormGroup;
 
   private editorView: EditorView;
   private updateSubscription: Subscription;
-
-  form = new FormGroup({
-    href: new FormControl('', [
-      Validators.required,
-      Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/??([^#\n\r]*)?#?([^\n\r]*)'),
-    ]),
-    text: new FormControl('', [Validators.required]),
-    openInNewTab: new FormControl(true),
-  });
 
   constructor(
     private el: ElementRef,
@@ -134,6 +126,15 @@ export class LinkComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.editorView = this.menuService.editor.view;
+
+    this.form = new FormGroup({
+      href: new FormControl('', [
+        Validators.required,
+        Validators.pattern(this.menuService.editor.linkValidationPattern),
+      ]),
+      text: new FormControl('', [Validators.required]),
+      openInNewTab: new FormControl(true),
+    });
 
     this.updateSubscription = this.menuService.editor.update.subscribe((view: EditorView) => {
       this.update(view);
